@@ -6,7 +6,7 @@ const LoginScreen = ({
   onRegisterClick,
   onForgotPassword,
   onForgotUsername,
-  onLoginSuccess // ← Add this prop
+  onLoginSuccess // ← New prop for handling successful login
 }) => {
   const [formData, setFormData] = useState({
     username: '',
@@ -61,18 +61,26 @@ const LoginScreen = ({
             onChange={handleChange}
             required
           />
+
+          <input
+            type="text"
+            placeholder="Account Number"
+            name="accountNumber"
+            required
+          />
+
+
           <div className="button-group">
             <button type="submit" className="signin-btn">Sign In</button>
             <button type="button" className="register-btn" onClick={onRegisterClick}>Register</button>
           </div>
           <div className="link-group">
-            <button type="button" onClick={onForgotPassword}>Forgot password</button>
-            <button type="button" onClick={onForgotUsername}>Forgot username</button>
-          </div>
+  <button type="button" onClick={onForgotPassword}>Forgot Password</button>
+  <span className="divider">|</span>
+  <button type="button" onClick={onForgotUsername}>Forgot Username</button>
+</div>
+
         </form>
-        <div className="contact-link">
-          📞 <a href="/contact">Contact Us</a>
-        </div>
       </div>
     </div>
   );
