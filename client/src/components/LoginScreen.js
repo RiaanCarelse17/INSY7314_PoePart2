@@ -6,13 +6,14 @@ const LoginScreen = ({
   onRegisterClick,
   onForgotPassword,
   onForgotUsername,
-  onLoginSuccess // ← Add this prop
+  onLoginSuccess
 }) => {
   const [formData, setFormData] = useState({
     username: '',
-    accountNumber: '',
     password: '',
   });
+
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,14 +23,43 @@ const LoginScreen = ({
     e.preventDefault();
     console.log('Logging in with:', formData);
 
+    const patterns = {
+      username: /^[a-zA-Z0-9_]{4,20}$/,
+      password: /^.{8,}$/
+    };
+
+    const fieldLabels = {
+      username: 'Username',
+      password: 'Password'
+    };
+
+    const newErrors = {};
+    for (const [field, pattern] of Object.entries(patterns)) {
+      const label = fieldLabels[field];
+      const value = formData[field];
+      if (!value.trim()) {
+        newErrors[field] = `${label} is required`;
+      } else if (!pattern.test(value)) {
+        newErrors[field] = `Please enter a valid ${label}`;
+      }
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({}); // Clear errors if valid
+
     try {
-      const response = await axios.post('http://localhost:5000/login', {
-        username: formData.username,
-        password: formData.password
-      });
+const response = await axios.post('https://localhost/login', {
+  username: formData.username,
+  password: formData.password
+});
+
 
       alert(`✅ Welcome back, ${response.data.fullName}!`);
-      onLoginSuccess(response.data); // ← Trigger redirect with user data
+      onLoginSuccess(response.data);
     } catch (error) {
       console.error('Login error:', error);
       if (error.response) {
@@ -51,16 +81,18 @@ const LoginScreen = ({
             placeholder="Username"
             value={formData.username}
             onChange={handleChange}
-            required
           />
+          {errors.username && <p className="error-text">{errors.username}</p>}
+
           <input
             type="password"
             name="password"
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
-            required
           />
+          {errors.password && <p className="error-text">{errors.password}</p>}
+
           <div className="button-group">
             <button type="submit" className="signin-btn">Sign In</button>
             <button type="button" className="register-btn" onClick={onRegisterClick}>Register</button>

@@ -1,14 +1,19 @@
+const fs = require('fs');
+const https = require('https');
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const db = require('./firebase');
+const patterns = require('./utils/validators');
 
 const app = express();
 
+// ✅ Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
+// ✅ Routes
 app.get('/', (req, res) => {
   res.send('Secure Payments API is running');
 });
@@ -46,13 +51,11 @@ app.post('/signup', async (req, res) => {
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
-  // Basic validation
   if (!username || !password) {
     return res.status(400).json({ error: 'Username and password are required' });
   }
 
   try {
-    // Fetch user profile from Firebase
     const userRef = db.ref(`users/${username}`);
     const snapshot = await userRef.once('value');
 
@@ -61,14 +64,12 @@ app.post('/login', async (req, res) => {
     }
 
     const userData = snapshot.val();
-
-    // Compare hashed password
     const isMatch = await bcrypt.compare(password, userData.password);
+
     if (!isMatch) {
       return res.status(401).json({ error: 'Invalid password' });
     }
 
-    // Success
     res.status(200).json({
       message: 'Login successful',
       fullName: userData.fullName,
@@ -80,6 +81,13 @@ app.post('/login', async (req, res) => {
   }
 });
 
-app.listen(5000, () => {
-  console.log('✅ Server running on port 5000');
+// ✅ SSL Configuration
+const sslOptions = {
+  key: fs.readFileSync('C:/Users/Riaan/Documents/certs/key.pem'),
+  cert: fs.readFileSync('C:/Users/Riaan/Documents/certs/cert.pem')
+};
+
+// ✅ Start HTTPS Server
+https.createServer(sslOptions, app).listen(443, () => {
+  console.log('🔒 HTTPS server running on port 443');
 });
