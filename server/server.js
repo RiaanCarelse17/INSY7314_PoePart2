@@ -2,16 +2,17 @@ const fs = require('fs');
 const https = require('https');
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet'); // ✅ Import Helmet
 const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const db = require('./firebase');
 const patterns = require('./utils/validators');
 const path = require('path');
 
-
 const app = express();
 
-// ✅ Middleware
+// ✅ Security Middleware
+app.use(helmet()); // ✅ Apply Helmet for secure headers
 app.use(cors());
 app.use(bodyParser.json());
 
