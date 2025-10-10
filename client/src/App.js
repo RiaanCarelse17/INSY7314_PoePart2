@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import LandingScreen from './components/LandingScreen';
 import RegisterScreen from './components/RegisterScreen';
 import LoginScreen from './components/LoginScreen';
-import HomeScreen from './components/HomeScreen'; // 
+import MakePayment from './components/MakePayment';
+import HomeScreen from './components/HomeScreen';
 import './App.css';
 
 function App() {
   const [screen, setScreen] = useState('landing');
-  const [user, setUser] = useState(null); // ← Track logged-in user
+  const [user, setUser] = useState(null); // Track logged-in user
 
   const handleLoginSuccess = (userData) => {
     setUser(userData);
@@ -27,17 +28,20 @@ function App() {
           onRegisterClick={() => setScreen('register')}
         />
       )}
+
       {screen === 'register' && (
         <RegisterScreen onBack={() => setScreen('landing')} />
       )}
+
       {screen === 'login' && (
         <LoginScreen
           onRegisterClick={() => setScreen('register')}
           onForgotPassword={() => console.log('Forgot password flow')}
           onForgotUsername={() => console.log('Forgot username flow')}
-          onLoginSuccess={handleLoginSuccess} // ← Pass login callback
+          onLoginSuccess={handleLoginSuccess}
         />
       )}
+
       {screen === 'home' && user && (
         <HomeScreen
           fullName={user.fullName}
@@ -46,7 +50,12 @@ function App() {
             savings: '23156.23'
           }}
           onSignOut={handleSignOut}
+          onMakePayment={() => setScreen('makepayment')}
         />
+      )}
+
+      {screen === 'makepayment' && user && (
+        <MakePayment onBack={() => setScreen('home')} />
       )}
     </div>
   );

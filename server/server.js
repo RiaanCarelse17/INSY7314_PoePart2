@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcryptjs');
 const db = require('./firebase');
 const patterns = require('./utils/validators');
+const path = require('path');
+
 
 const app = express();
 
@@ -83,8 +85,8 @@ app.post('/login', async (req, res) => {
 
 // ✅ SSL Configuration
 const sslOptions = {
-  key: fs.readFileSync('C:/Users/Riaan/Documents/certs/key.pem'),
-  cert: fs.readFileSync('C:/Users/Riaan/Documents/certs/cert.pem')
+  key: fs.readFileSync(path.join(__dirname, 'certs', 'key.pem')),
+  cert: fs.readFileSync(path.join(__dirname, 'certs', 'cert.pem'))
 };
 
 // ✅ Start HTTPS Server

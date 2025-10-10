@@ -1,9 +1,16 @@
 import React from 'react';
 import './HomeScreen.css';
 
-const HomeScreen = ({ fullName = "User", accountData = { daily: "6,089.23", savings: "23,156.23" }, onSignOut }) => {
+const HomeScreen = ({
+  fullName = "User",
+  accountData = { daily: "6,089.23", savings: "23,156.23" },
+  onSignOut,
+  onMakePayment
+}) => {
   const handleMakePayment = () => {
-    // Add your payment logic here
+    if (onMakePayment) {
+      onMakePayment();
+    }
     console.log('Make Payment clicked');
   };
 
@@ -26,13 +33,13 @@ const HomeScreen = ({ fullName = "User", accountData = { daily: "6,089.23", savi
 
       <div className="accounts-section">
         <h2 className="section-title">Accounts</h2>
-        
+
         <div className="account-summary">
           <div className="account-card">
             <div className="account-icon">
               <svg viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="5" width="18" height="14" rx="2"/>
-                <circle cx="12" cy="12" r="2"/>
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <circle cx="12" cy="12" r="2" />
               </svg>
             </div>
             <div className="account-name">Daily account</div>
@@ -43,8 +50,8 @@ const HomeScreen = ({ fullName = "User", accountData = { daily: "6,089.23", savi
           <div className="account-card">
             <div className="account-icon">
               <svg viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="5" width="18" height="14" rx="2"/>
-                <circle cx="12" cy="12" r="2"/>
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <circle cx="12" cy="12" r="2" />
               </svg>
             </div>
             <div className="account-name">Savings</div>
