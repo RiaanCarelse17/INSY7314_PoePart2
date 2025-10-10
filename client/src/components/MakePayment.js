@@ -7,6 +7,7 @@ const MakePayment = ({ onBack }) => {
     accountNumber: '',
     swiftCode: '',
     reference: '',
+    currency: '',
     amount: ''
   });
 
@@ -17,20 +18,22 @@ const MakePayment = ({ onBack }) => {
     accountNumber: /^[0-9]{2,}$/,
     swiftCode: /^[A-Z0-9]{2,}$/,
     reference: /^[A-Za-z0-9\s]{2,}$/,
+    currency: /^[A-Z]{3}$/,
     amount: /^[0-9.]{1,}$/
   };
 
   const formatLabel = (key) => {
-    if (key === 'amount') return 'Amount (R)';
-    return key
-      .replace(/([A-Z])/g, ' $1')
-      .replace(/^./, str => str.toUpperCase());
+    if (key === 'accountNumber') return 'Account Number';
+    if (key === 'swiftCode') return 'SWIFT Code';
+    return key.charAt(0).toUpperCase() + key.slice(1);
   };
 
   const validate = () => {
     const newErrors = {};
     Object.keys(form).forEach((key) => {
-      if (!patterns[key].test(form[key])) {
+      if (!form[key]) {
+        newErrors[key] = `${formatLabel(key)} is required`;
+      } else if (!patterns[key].test(form[key])) {
         newErrors[key] = `Please enter a valid ${formatLabel(key)}`;
       }
     });
@@ -39,7 +42,12 @@ const MakePayment = ({ onBack }) => {
   };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: '' });
+    }
   };
 
   const handleSubmit = (e) => {
@@ -62,32 +70,107 @@ const MakePayment = ({ onBack }) => {
     }
   };
 
-  return (
-    <div className="payment-container">
-      <nav className="payment-navbar">
-        <span>Private Banking</span>
-        <button onClick={onBack}>← Home</button>
-      </nav>
+return (
+  <div className="payment-container">
+    <div className="payment-content">
+      <h2 className="payment-heading">Payments</h2>
 
-      <h2>Make Payment</h2>
+      <button type="button" className="home-button" onClick={onBack}>
+        Home
+      </button>
+
+      <h2 className="payment-heading">Make Payment</h2>
+
       <form className="payment-form" onSubmit={handleSubmit}>
-        {Object.keys(form).map((field) => (
-          <div key={field} className="form-group">
-            <label>{formatLabel(field)}</label>
+        <div className="form-group">
+          <label>Name</label>
+          <input
+            type="text"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            placeholder="Enter recipient name"
+          />
+          {errors.name && <span className="error">{errors.name}</span>}
+        </div>
+
+        <div className="form-group">
+          <label>Account Number</label>
+          <input
+            type="text"
+            name="accountNumber"
+            value={form.accountNumber}
+            onChange={handleChange}
+            placeholder="Enter account number"
+          />
+          {errors.accountNumber && (
+            <span className="error">{errors.accountNumber}</span>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label>SWIFT Code</label>
+          <input
+            type="text"
+            name="swiftCode"
+            value={form.swiftCode}
+            onChange={handleChange}
+            placeholder="Enter SWIFT code"
+          />
+          {errors.swiftCode && <span className="error">{errors.swiftCode}</span>}
+        </div>
+
+        <div className="form-group">
+          <label>Reference</label>
+          <input
+            type="text"
+            name="reference"
+            value={form.reference}
+            onChange={handleChange}
+            placeholder="Enter payment reference"
+          />
+          {errors.reference && (
+            <span className="error">{errors.reference}</span>
+          )}
+        </div>
+
+        <div className="form-row">
+          <div className="form-group">
+            <label>Currency</label>
             <input
               type="text"
-              name={field}
-              value={form[field]}
+              name="currency"
+              value={form.currency}
               onChange={handleChange}
-              required
+              placeholder="Rand (ZAR)"
+              maxLength="3"
             />
-            {errors[field] && <span className="error">{errors[field]}</span>}
+            {errors.currency && (
+              <span className="error">{errors.currency}</span>
+            )}
           </div>
-        ))}
-        <button type="submit" className="pay-button">Pay Now</button>
+          <div className="form-group">
+            <label>Amount</label>
+            <input
+              type="text"
+              name="amount"
+              value={form.amount}
+              onChange={handleChange}
+              placeholder="R0.00"
+            />
+            {errors.amount && <span className="error">{errors.amount}</span>}
+          </div>
+        </div>
+
+        <div className="button-container">
+          <button type="submit" className="pay-button">
+            Pay Now
+          </button>
+        </div>
       </form>
     </div>
-  );
+  </div>
+);
 };
 
 export default MakePayment;
