@@ -1,62 +1,112 @@
 import React, { useState } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import LandingScreen from './components/LandingScreen';
 import RegisterScreen from './components/RegisterScreen';
 import LoginScreen from './components/LoginScreen';
+import AdminDashboard from './components/AdminDashboard';
 import MakePayment from './components/MakePayment';
 import HomeScreen from './components/HomeScreen';
 import './App.css';
 
 function App() {
-  const [screen, setScreen] = useState('landing');
-  const [user, setUser] = useState(null); // Track logged-in user
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   const handleLoginSuccess = (userData) => {
     setUser(userData);
-    setScreen('home');
+    if (userData.role === 'admin') {
+      navigate('/admin');
+    } else {
+      navigate('/home');
+    }
   };
 
   const handleSignOut = () => {
     setUser(null);
-    setScreen('landing');
+    navigate('/');
   };
 
   return (
     <div className="App">
-      {screen === 'landing' && (
-        <LandingScreen
-          onLoginClick={() => setScreen('login')}
-          onRegisterClick={() => setScreen('register')}
+      <Routes>
+        {/* Landing */}
+        <Route
+          path="/"
+          element={
+            <LandingScreen
+              onLoginClick={() => navigate('/login')}
+              onRegisterClick={() => navigate('/register')}
+            />
+          }
         />
-      )}
 
-      {screen === 'register' && (
-        <RegisterScreen onBack={() => setScreen('landing')} />
-      )}
-
-      {screen === 'login' && (
-        <LoginScreen
-          onRegisterClick={() => setScreen('register')}
-          onForgotPassword={() => console.log('Forgot password flow')}
-          onForgotUsername={() => console.log('Forgot username flow')}
-          onLoginSuccess={handleLoginSuccess}
+        {/* Register */}
+        <Route
+          path="/register"
+          element={<RegisterScreen onBack={() => navigate('/')} />}
         />
-      )}
 
-      {screen === 'home' && user && (
-        <HomeScreen
-          fullName={user.fullName}
-          accountData={{
-            daily: '6089.23',
-            savings: '23156.23'
-          }}
-          onSignOut={handleSignOut}
-          onMakePayment={() => setScreen('makepayment')}
+        {/* Login */}
+        <Route
+          path="/login"
+          element={
+            <LoginScreen
+              onRegisterClick={() => navigate('/register')}
+              onForgotPassword={() => console.log('Forgot password flow')}
+              onForgotUsername={() => console.log('Forgot username flow')}
+              onLoginSuccess={handleLoginSuccess}
+            />
+          }
         />
-      )}
 
-      {screen === 'makepayment' && user && (
-        <MakePayment onBack={() => setScreen('home')} />
-      )}
+        {/* Home (user dashboard) */}
+        <Route
+  path="/home"
+  element={
+    user && user.role !== 'admin' ? (
+      <HomeScreen
+        fullName={user.fullName}
+        balance={user.balance}        // 👈 pass actual balance from login response
+        onSignOut={handleSignOut}
+        onMakePayment={() => navigate('/makepayment')}
+      />
+    ) : (
+      <LoginScreen onLoginSuccess={handleLoginSuccess} />
+    )
+  }
+/>
+
+
+        {/* Make Payment */}
+        <Route
+          path="/makepayment"
+          element={
+            user && user.role !== 'admin' ? (
+              <MakePayment
+                user={user}                // 👈 pass user down
+                onBack={() => navigate('/home')}
+              />
+            ) : (
+              <LoginScreen onLoginSuccess={handleLoginSuccess} />
+            )
+          }
+        />
+
+        {/* Admin Dashboard */}
+        <Route
+          path="/admin"
+          element={
+            user && user.role === 'admin' ? (
+              <AdminDashboard
+                fullName={user.fullName}
+                onSignOut={handleSignOut}
+              />
+            ) : (
+              <LoginScreen onLoginSuccess={handleLoginSuccess} />
+            )
+          }
+        />
+      </Routes>
     </div>
   );
 }

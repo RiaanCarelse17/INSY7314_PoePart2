@@ -52,11 +52,10 @@ const LoginScreen = ({
     setErrors({}); // Clear errors if valid
 
     try {
-const response = await axios.post('https://localhost/login', {
-  username: formData.username,
-  password: formData.password
-});
-
+      const response = await axios.post('https://localhost:443/login', {
+        username: formData.username,
+        password: formData.password
+      });
 
       alert(`✅ Welcome back, ${response.data.fullName}!`);
       onLoginSuccess(response.data);
@@ -98,11 +97,10 @@ const response = await axios.post('https://localhost/login', {
             <button type="button" className="register-btn" onClick={onRegisterClick}>Register</button>
           </div>
           <div className="link-group">
-  <button type="button" onClick={onForgotPassword}>Forgot Password</button>
-  <span className="divider">|</span>
-  <button type="button" onClick={onForgotUsername}>Forgot Username</button>
-</div>
-
+            <button type="button" onClick={onForgotPassword}>Forgot Password</button>
+            <span className="divider">|</span>
+            <button type="button" onClick={onForgotUsername}>Forgot Username</button>
+          </div>
         </form>
       </div>
     </div>

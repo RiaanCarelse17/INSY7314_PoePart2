@@ -1,0 +1,148 @@
+/* AdminDashboard.css */
+
+/* Container */
+.home-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #f5f7fa;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #333;
+}
+
+/* Navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #1e3a8a;
+  color: #fff;
+  padding: 14px 24px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.nav-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.nav-links button {
+  margin-left: 12px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #2563eb;
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.nav-links button:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+/* Section */
+.accounts-section {
+  flex: 1;
+  padding: 25px;
+}
+
+.section-title {
+  font-size: 1.5rem;
+  margin-bottom: 18px;
+  font-weight: 600;
+  color: #222;
+}
+
+/* Table */
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.transaction-table th,
+.transaction-table td {
+  border: 1px solid #e5e7eb;
+  padding: 12px 10px;
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.transaction-table th {
+  background-color: #f9fafb;
+  font-weight: 600;
+  color: #374151;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.transaction-table tr:nth-child(even) {
+  background-color: #fdfdfd;
+}
+
+.transaction-table tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* Buttons */
+.verify-btn {
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  padding: 7px 14px;
+  margin-right: 6px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.verify-btn:hover {
+  background: #15803d;
+  transform: translateY(-1px);
+}
+
+.deny-btn {
+  background: #dc2626;
+  color: #fff;
+  border: none;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.deny-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .transaction-table th,
+  .transaction-table td {
+    font-size: 0.8rem;
+    padding: 8px;
+  }
+
+  .nav-title {
+    font-size: 1.1rem;
+  }
+
+  .nav-links button {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+}
