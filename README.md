@@ -1,103 +1,123 @@
-Project by
+# SecurePay
 
-Riaan Carelse ST10065550
-Jared Allen ST10271869
-Abigail Finnis ST10045251
+## Project by
+- Riaan Carelse ST10065550  
+- Jared Allen ST10271869  
+- Abigail Finnis ST10045251  
 
-Youtube link: https://youtu.be/5BOnPDxAhjk
+ Demo Video:  
+Youtube link: https://youtu.be/ZJo-6fOrDfs
 
-Overview
-SecurePay is a full-stack web application built for our university project to demonstrate secure customer authentication, payment processing, and DevSecOps best practices. This includes HTTPS encryption, input validation, password hashing, and automated CI/CD pipelines.
+*** Please note AI was used in the duration of this project ***
 
-Users can:
+Note: In the demo video, funds were mistakenly transferred to the same account for demonstration purposes.  
+The application fully supports sending money to any other valid account that exists in the database. Even though our source code in our .zip folder says "PoePart2" our part 3 work is in there. Thanks for understanding!
 
-Sign up with secure credentials
+** Admin login data is pre-created as registration for this role is not possible 
+	Username: admin1
+	Password: AdminStrongPassword123!
 
-Log in with hashed password verification
+##  Overview
+**SecurePay** is a full-stack web application built for our university project to demonstrate secure customer authentication, payment processing, and DevSecOps best practices.  
 
-Make payments in South African Rands (ZAR)
+This includes HTTPS encryption, input validation, password hashing, and automated CI/CD pipelines with **SonarCloud quality gates** to enforce code security and maintainability.
 
-View immediate feedback and error handling
+### Users can:
+- Sign up with secure credentials  
+- Log in with hashed password verification  
+- Make payments in South African Rands (ZAR)  
+- View immediate feedback and error handling  
 
-🛠️ Technologies Used
-Frontend: React (with modular components and custom navigation)
+---
 
-Backend: Express (Node.js) with Firebase Realtime Database
+## Technologies Used
 
-Security:
+**Frontend**
+- React (modular components, custom navigation)
 
-HTTPS with self-signed certificates
+**Backend**
+- Express (Node.js) with Firebase Realtime Database
 
-Helmet for secure headers
+**Security**
+- HTTPS with self-signed certificates  
+- Helmet for secure headers  
+- Bcrypt for password hashing and salting  
+- Regex-based input validation  
+- Rate limiting with `express-rate-limit`  
+- Firebase for secure online data storage  
 
-Bcrypt for password hashing and salting
+**DevSecOps**
+- GitHub Actions pipeline for linting, testing, and auditing  
+- CircleCI pipeline with:
+  - Dependency installation
+  - SonarCloud static analysis
+  - **Quality Gate enforcement** (pipeline fails if critical issues are found)  
+- SonarCloud integration for:
+  - Code smells, bugs, and vulnerabilities
+  - Enforced quality gates
+  - CI/CD feedback loop  
 
-Regex-based input validation
+---
 
-Rate limiting with express-rate-limit
+##  How to Run Locally
 
-Firebase for secure online data storage
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/your-username/INSY7314_POE_FINAL.git
 
-GitHub Actions pipeline for linting, testing, and auditing
+2.cd server
+  npm install
 
-CircleCI integration
+  cd ../client
+  npm install
 
+3.Generate SSL Certificates: 
+  openssl req -nodes -new -x509 -keyout key.pem -out cert.pem
 
-🚀 How to Run Locally
-1. Clone the Repository
-bash
-git clone https://github.com/your-username/INSY7314_PoePart2.git
-cd securepay
-2. Install Dependencies
-bash
-cd backend
-npm install
+4. Start the backend
+   cd server
+   node server.js
 
-cd ../client
-npm install
-3. Generate SSL Certificates
-Place your cert.pem and key.pem files inside server/certs/. You can generate them using:
+5. Start the frontend
+   cd client
+   npm start
 
-bash
-openssl req -nodes -new -x509 -keyout key.pem -out cert.pem
-4. Start the Backend
-bash
-cd server
-node server.js
-The backend runs on https://localhost:443
+## Security Highlights
 
-5. Start the Frontend
-bash
-cd frontend
-npm start
-The frontend runs on http://localhost:3000 and proxies requests to the secure backend.
+-Helmet: Adds secure headers to all responses
 
-🔐 Security Highlights
-Helmet: Adds secure headers to all responses
+-Rate Limiting: Prevents brute-force login attempts
 
-Rate Limiting: Prevents brute-force login attempts
+-Bcrypt: Hashes and salts passwords before storing
 
-Bcrypt: Hashes and salts passwords before storing
+-Regex Validation: Blocks injection attacks on all input fields
 
-Regex Validation: Blocks injection attacks on all input fields
+-HTTPS: Encrypts all data in transit using SSL/TLS
 
-HTTPS: Encrypts all data in transit using SSL
+-SonarCloud Quality Gates: Prevents insecure or low-quality code from merging
 
-🧪 DevSecOps Pipeline
-GitHub Actions runs on every push:
+##DevSecOps Pipeline
+GitHub Actions
+Runs on every push:
 
-npm run lint
+-npm run lint
 
-npm test
+-npm test
 
-npm audit
+-npm audit
 
-Optional CircleCI config included in .circleci/config.yml
+CircleCI
+-Build job: Installs dependencies and prepares the project
 
-📄 Documentation
+-SonarCloud job: Runs static analysis with enforced quality gates
 
+-Workflow: Ensures code is only accepted if it passes both build and security checks
 
+##Documentation
 
-Demo video included 
+-Demo video included for academic review
 
+-CI/CD config in .circleci/config.yml
 
+-Security and DevSecOps practices documented inline
+   
