@@ -3,23 +3,33 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: cimg/node:18.17
+      - image: cimg/node:18.17   # CircleCI Node.js image
     steps:
-      - checkout
+      - checkout                 # Pull your repo code
       - run:
           name: Install server dependencies
           command: cd server && npm install
+
+  sonarcloud:
+    docker:
+      - image: sonarsource/sonar-scanner-cli:latest   # Official SonarScanner CLI image
+    steps:
+      - checkout
       - run:
           name: Run SonarCloud Scan
           command: |
-            cd server && npx sonar-scanner \
+            sonar-scanner \
               -Dsonar.projectKey=$SONAR_PROJECT_KEY \
               -Dsonar.organization=$SONAR_ORGANIZATION \
               -Dsonar.host.url=https://sonarcloud.io \
-              -Dsonar.login=$SONAR_TOKEN
+              -Dsonar.login=$SONAR_TOKEN \
+              -Dsonar.qualitygate.wait=true
 
 workflows:
   version: 2
   build_and_scan:
     jobs:
       - build
+      - sonarcloud:
+          requires:
+            - build
